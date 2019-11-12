@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 
 const Header = styled.div`
   width: 100%;
@@ -34,8 +33,10 @@ const Image = styled.img`
   }
 `;
 
-const InfiniteScroll = ({ state, setState }) => {
+const InfiniteScroll = () => {
   const [loadMore, setLoadMore] = useState(true);
+  const [state, setState] = useState([]);
+  const loadMoreItems = stateItems => setState([...state, ...stateItems]);
 
   const getAPI = async load => {
     try {
@@ -46,7 +47,7 @@ const InfiniteScroll = ({ state, setState }) => {
           data: { message }
         } = await api;
 
-        setState([...state, ...message]);
+        loadMoreItems(message);
       }
     } catch (error) {
       console.log(error);
@@ -89,11 +90,6 @@ const InfiniteScroll = ({ state, setState }) => {
       </Container>
     </>
   );
-};
-
-InfiniteScroll.propTypes = {
-  state: PropTypes.array,
-  setState: PropTypes.func
 };
 
 export default InfiniteScroll;
