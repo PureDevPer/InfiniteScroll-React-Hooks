@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { api } from "../api";
+
+const Header = styled.div`
+  font-size: 40px;
+  font-weight: 600;
+  text-align: center;
+  margin: 30px 0px;
+`;
 
 const Container = styled.div`
   width: 100%;
   padding: 0px 20px;
   display: grid;
-  grid-gap: 20px;
-  grid-row-gap: 20px;
+  grid-gap: 30px;
+  grid-row-gap: 30px;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  background-color: #fafafa;
 `;
 
 const Image = styled.img`
@@ -31,6 +39,8 @@ const InfiniteScroll = ({ state, setState }) => {
   const getAPI = async load => {
     try {
       if (load) {
+        const api = axios.get("https://dog.ceo/api/breeds/image/random/10");
+
         const {
           data: { message }
         } = await api;
@@ -47,12 +57,36 @@ const InfiniteScroll = ({ state, setState }) => {
     setLoadMore(false);
   }, [getAPI, loadMore]);
 
+  useEffect(() => {
+    const items = document.getElementById("items");
+
+    window.addEventListener("scroll", () => {
+      if (
+        window.scrollY + window.innerHeight ===
+        items.clientHeight + items.offsetTop + 8
+      ) {
+        setLoadMore(true);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    const items = document.getElementById("items");
+
+    if (items.clientHeight && items.clientHeight <= window.innerHeight) {
+      setLoadMore(true);
+    }
+  }, [state]);
+
   return (
-    <Container>
-      {state.map((data, index) => (
-        <Image src={data} alt="" key={index} />
-      ))}
-    </Container>
+    <>
+      <Header>Infinite Scroll using React Hooks</Header>
+      <Container id="items">
+        {state.map((data, index) => (
+          <Image src={data} alt="" key={index} />
+        ))}
+      </Container>
+    </>
   );
 };
 
