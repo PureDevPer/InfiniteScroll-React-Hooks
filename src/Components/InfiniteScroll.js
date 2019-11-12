@@ -4,6 +4,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const Header = styled.div`
+  width: 100%;
   font-size: 40px;
   font-weight: 600;
   text-align: center;
@@ -12,7 +13,7 @@ const Header = styled.div`
 
 const Container = styled.div`
   width: 100%;
-  padding: 0px 20px;
+  padding: 0px 10px;
   display: grid;
   grid-gap: 30px;
   grid-row-gap: 30px;
